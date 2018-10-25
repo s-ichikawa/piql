@@ -1,0 +1,27 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+schema: schema.graphql
+exec:
+  filename: generated.go
+model:
+  filename: model/models_gen.go
+resolver:
+  filename: resolver/resolver.go
+  type: Resolver
+models:
+  MutationResponse:
+    model: github.com/s-ichikawa/piql/model.MutationResponse
+  Graph:
+    model: github.com/s-ichikawa/piql/model.Graph
+  GraphInfo:
+    model: github.com/s-ichikawa/piql/model.GraphInfo
+  Pixel:
+    model: github.com/s-ichikawa/piql/model.Pixel
+  Webhook:
+    model: github.com/s-ichikawa/piql/model.Webhook
+  Quantity:
+    model: github.com/s-ichikawa/piql/scalar.Quantity
+

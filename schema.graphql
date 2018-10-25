@@ -1,0 +1,161 @@
+input NewUser {
+  token: String!
+  username: String!
+  agreeTermsOfService: String!
+  notMinor: String!
+}
+
+input NewToken {
+  username: String!
+  newToken: String!
+}
+
+input DeleteUser {
+  username: String!
+}
+
+input NewGraph {
+  username: String!
+  id: ID!
+  name: String!
+  unit: String!
+  type: String!
+  color: String!
+}
+
+input UpdateGraph {
+  username: String!
+  id: ID!
+  name: String!
+  unit: String!
+  color: String!
+}
+
+input DeleteGraph {
+  username: String!
+  id: ID!
+}
+
+input NewPixel {
+  username: String!
+  id: ID!
+  date: String!
+  quantity: Quantity!
+}
+
+input IncrementPixel {
+  username: String!
+  id: ID!
+}
+
+input DecrementPixel {
+  username: String!
+  id: ID!
+}
+
+input DeletePixel {
+  username: String!
+  id: ID!
+  date: String!
+}
+
+type MutationResponse {
+  message: String
+  isSuccess: Boolean
+}
+
+input NewWebhook {
+  username: String!
+  graphID: String!
+  type: String!
+}
+
+type NewWebhookResponse {
+  hashString: String
+  message: String!
+  isSuccess: Boolean!
+}
+
+input CallWebhook {
+  username: String!
+  hashString: String!
+}
+
+input DeleteWebhook {
+  username: String!
+  hashString: String!
+}
+
+type Mutation {
+  createUser(input: NewUser!): MutationResponse
+  updateToken(input: NewToken!): MutationResponse
+  deleteUser(input: DeleteUser!): MutationResponse
+
+  createGraph(input: NewGraph!): MutationResponse
+  updateGraph(input: UpdateGraph!): MutationResponse
+  deleteGraph(input: DeleteGraph!): MutationResponse
+
+  createPixel(input: NewPixel!): MutationResponse
+  updatePixel(input: NewPixel!): MutationResponse
+  incrementPixel(input: IncrementPixel!): MutationResponse
+  decrementPixel(input: DecrementPixel!): MutationResponse
+  deletePixel(input: DeletePixel!): MutationResponse
+
+  createWebhook(input: NewWebhook!): NewWebhookResponse!
+  invokeWebhook(input: CallWebhook!): MutationResponse
+  deleteWebhook(input: DeleteWebhook!): MutationResponse
+}
+
+type GraphInfo {
+  id: ID!
+  name: String!
+  unit: String!
+  type: String!
+  color: String!
+}
+
+input GetGraphs {
+  username: String!
+}
+
+type Graph {
+    id: ID!
+    svg: String
+}
+
+input GetGraph {
+  username: String!
+  id: ID!
+  date: String
+  mode: String
+}
+
+scalar Quantity
+
+type Pixel {
+  id: String!
+  quantity: Quantity!
+}
+
+input GetPixel {
+  username: String!
+  id: ID!
+  date: String!
+}
+
+type Webhook {
+  hashString: String!
+  graphId: String!
+  type: String!
+}
+
+input GetWebhooks {
+  username: String!
+}
+
+type Query {
+  graphs(input: GetGraphs): [GraphInfo!]
+  graph(input: GetGraph): Graph
+  pixel(input: GetPixel): Pixel
+  webhooks(input: GetWebhooks): [Webhook!]
+}
