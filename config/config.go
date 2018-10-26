@@ -6,7 +6,7 @@ import (
 )
 
 type Env struct {
-	PiqlPort       string `envconfig:"PIQL_PORT" default:"8080""`
+	PiqlPort       string `envconfig:"PIQL_PORT" default:"8080"`
 	PixelaEndpoint string `envconfig:"PIXCELA_ENDPOINT" default:"https://pixe.la"`
 }
 

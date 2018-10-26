@@ -8,15 +8,15 @@ import (
 
 type MarshalQuantityTestCase struct {
 	test     string
-	expected json.Number
+	expected string
 }
 
 var marshalQuantityTests = []MarshalQuantityTestCase{
-	{"0", json.Number("0")},
-	{"1", json.Number("1")},
-	{"1.1", json.Number("1.1")},
-	{"99999999", json.Number("99999999")},
-	{"99999999.99999999", json.Number("99999999.99999999")},
+	{"0", "0"},
+	{"1", "1"},
+	{"1.1", "1.1"},
+	{"99999999", "99999999"},
+	{"99999999.99999999", "99999999.99999999"},
 }
 
 func TestMarshalQuantity(t *testing.T) {
@@ -52,7 +52,7 @@ func TestUnmarshalQuantity(t *testing.T) {
 			t.Error(err)
 		}
 		if string(q) != test.expected {
-			t.Errorf(`expexted="%d" actual="%d"`, test.expected, q)
+			t.Errorf(`expexted="%s" actual="%s"`, test.expected, q)
 		}
 	}
 }

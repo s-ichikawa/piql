@@ -29,10 +29,10 @@ func NewClient(urlStr, token string, insecureSkipVerify bool) (*Client, error) {
 	tlsConfig := tls.Config{
 		InsecureSkipVerify: insecureSkipVerify,
 	}
-	transport := *http.DefaultTransport.(*http.Transport)
+	transport := http.DefaultTransport.(*http.Transport)
 	transport.TLSClientConfig = &tlsConfig
 	httpClient := &http.Client{
-		Transport: &transport,
+		Transport: transport,
 	}
 
 	client := Client{
