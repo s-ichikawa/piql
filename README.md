@@ -1,4 +1,6 @@
 # PIQL
+[![CircleCI](https://circleci.com/gh/s-ichikawa/piql.svg?style=svg)](https://circleci.com/gh/s-ichikawa/piql)
+
 piql is GraphQL Server for wrapped [Pixela](https://pixe.la/) APIs.
 
 ## Getting Started
