@@ -3729,9 +3729,9 @@ func UnmarshalGetGraph(v interface{}) (model.GetGraph, error) {
 			}
 		case "mode":
 			var err error
-			var ptr1 string
+			var ptr1 model.GraphMode
 			if v != nil {
-				ptr1, err = graphql.UnmarshalString(v)
+				err = (&ptr1).UnmarshalGQL(v)
 				it.Mode = &ptr1
 			}
 
@@ -3866,13 +3866,13 @@ func UnmarshalNewGraph(v interface{}) (model.NewGraph, error) {
 			}
 		case "type":
 			var err error
-			it.Type, err = graphql.UnmarshalString(v)
+			err = (&it.Type).UnmarshalGQL(v)
 			if err != nil {
 				return it, err
 			}
 		case "color":
 			var err error
-			it.Color, err = graphql.UnmarshalString(v)
+			err = (&it.Color).UnmarshalGQL(v)
 			if err != nil {
 				return it, err
 			}
@@ -4040,7 +4040,7 @@ func UnmarshalUpdateGraph(v interface{}) (model.UpdateGraph, error) {
 			}
 		case "color":
 			var err error
-			it.Color, err = graphql.UnmarshalString(v)
+			err = (&it.Color).UnmarshalGQL(v)
 			if err != nil {
 				return it, err
 			}
@@ -4090,13 +4090,27 @@ input DeleteUser {
   username: String!
 }
 
+enum GraphType {
+  int
+  float
+}
+
+enum GraphColor {
+  shibafu
+  momiji
+  sora
+  ichou
+  ajisai
+  kuro
+}
+
 input NewGraph {
   username: String!
   id: ID!
   name: String!
   unit: String!
-  type: String!
-  color: String!
+  type: GraphType!
+  color: GraphColor!
 }
 
 input UpdateGraph {
@@ -4104,7 +4118,7 @@ input UpdateGraph {
   id: ID!
   name: String!
   unit: String!
-  color: String!
+  color: GraphColor!
 }
 
 input DeleteGraph {
@@ -4138,6 +4152,11 @@ input DeletePixel {
 type MutationResponse {
   message: String
   isSuccess: Boolean
+}
+
+enum WebhookType {
+  increment
+  decrement
 }
 
 input NewWebhook {
@@ -4199,11 +4218,15 @@ type Graph {
     svg: String
 }
 
+enum GraphMode {
+  short
+}
+
 input GetGraph {
   username: String!
   id: ID!
   date: String
-  mode: String
+  mode: GraphMode
 }
 
 scalar Quantity

@@ -124,7 +124,6 @@ func TestMutationResolver_UpdateToken(t *testing.T) {
     }
 }
 
-
 func TestMutationResolver_DeleteUser(t *testing.T) {
     ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         if r.Method != http.MethodDelete {

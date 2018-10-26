@@ -14,13 +14,27 @@ input DeleteUser {
   username: String!
 }
 
+enum GraphType {
+  int
+  float
+}
+
+enum GraphColor {
+  shibafu
+  momiji
+  sora
+  ichou
+  ajisai
+  kuro
+}
+
 input NewGraph {
   username: String!
   id: ID!
   name: String!
   unit: String!
-  type: String!
-  color: String!
+  type: GraphType!
+  color: GraphColor!
 }
 
 input UpdateGraph {
@@ -28,7 +42,7 @@ input UpdateGraph {
   id: ID!
   name: String!
   unit: String!
-  color: String!
+  color: GraphColor!
 }
 
 input DeleteGraph {
@@ -62,6 +76,11 @@ input DeletePixel {
 type MutationResponse {
   message: String
   isSuccess: Boolean
+}
+
+enum WebhookType {
+  increment
+  decrement
 }
 
 input NewWebhook {
@@ -123,11 +142,15 @@ type Graph {
     svg: String
 }
 
+enum GraphMode {
+  short
+}
+
 input GetGraph {
   username: String!
   id: ID!
   date: String
-  mode: String
+  mode: GraphMode
 }
 
 scalar Quantity

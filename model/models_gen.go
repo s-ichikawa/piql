@@ -3,6 +3,10 @@
 package model
 
 import (
+	fmt "fmt"
+	io "io"
+	strconv "strconv"
+
 	scalar "github.com/s-ichikawa/piql/scalar"
 )
 
@@ -37,10 +41,10 @@ type DeleteWebhook struct {
 }
 
 type GetGraph struct {
-	Username string  `json:"username"`
-	ID       string  `json:"id"`
-	Date     *string `json:"date"`
-	Mode     *string `json:"mode"`
+	Username string     `json:"username"`
+	ID       string     `json:"id"`
+	Date     *string    `json:"date"`
+	Mode     *GraphMode `json:"mode"`
 }
 
 type GetGraphs struct {
@@ -63,12 +67,12 @@ type IncrementPixel struct {
 }
 
 type NewGraph struct {
-	Username string `json:"username"`
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Unit     string `json:"unit"`
-	Type     string `json:"type"`
-	Color    string `json:"color"`
+	Username string     `json:"username"`
+	ID       string     `json:"id"`
+	Name     string     `json:"name"`
+	Unit     string     `json:"unit"`
+	Type     GraphType  `json:"type"`
+	Color    GraphColor `json:"color"`
 }
 
 type NewPixel struct {
@@ -103,9 +107,156 @@ type NewWebhookResponse struct {
 }
 
 type UpdateGraph struct {
-	Username string `json:"username"`
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Unit     string `json:"unit"`
-	Color    string `json:"color"`
+	Username string     `json:"username"`
+	ID       string     `json:"id"`
+	Name     string     `json:"name"`
+	Unit     string     `json:"unit"`
+	Color    GraphColor `json:"color"`
+}
+
+type GraphColor string
+
+const (
+	GraphColorShibafu GraphColor = "shibafu"
+	GraphColorMomiji  GraphColor = "momiji"
+	GraphColorSora    GraphColor = "sora"
+	GraphColorIchou   GraphColor = "ichou"
+	GraphColorAjisai  GraphColor = "ajisai"
+	GraphColorKuro    GraphColor = "kuro"
+)
+
+func (e GraphColor) IsValid() bool {
+	switch e {
+	case GraphColorShibafu, GraphColorMomiji, GraphColorSora, GraphColorIchou, GraphColorAjisai, GraphColorKuro:
+		return true
+	}
+	return false
+}
+
+func (e GraphColor) String() string {
+	return string(e)
+}
+
+func (e *GraphColor) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GraphColor(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GraphColor", str)
+	}
+	return nil
+}
+
+func (e GraphColor) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type GraphMode string
+
+const (
+	GraphModeShort GraphMode = "short"
+)
+
+func (e GraphMode) IsValid() bool {
+	switch e {
+	case GraphModeShort:
+		return true
+	}
+	return false
+}
+
+func (e GraphMode) String() string {
+	return string(e)
+}
+
+func (e *GraphMode) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GraphMode(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GraphMode", str)
+	}
+	return nil
+}
+
+func (e GraphMode) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type GraphType string
+
+const (
+	GraphTypeInt   GraphType = "int"
+	GraphTypeFloat GraphType = "float"
+)
+
+func (e GraphType) IsValid() bool {
+	switch e {
+	case GraphTypeInt, GraphTypeFloat:
+		return true
+	}
+	return false
+}
+
+func (e GraphType) String() string {
+	return string(e)
+}
+
+func (e *GraphType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GraphType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GraphType", str)
+	}
+	return nil
+}
+
+func (e GraphType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type WebhookType string
+
+const (
+	WebhookTypeIncrement WebhookType = "increment"
+	WebhookTypeDecrement WebhookType = "decrement"
+)
+
+func (e WebhookType) IsValid() bool {
+	switch e {
+	case WebhookTypeIncrement, WebhookTypeDecrement:
+		return true
+	}
+	return false
+}
+
+func (e WebhookType) String() string {
+	return string(e)
+}
+
+func (e *WebhookType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = WebhookType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid WebhookType", str)
+	}
+	return nil
+}
+
+func (e WebhookType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
