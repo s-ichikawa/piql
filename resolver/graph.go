@@ -25,10 +25,10 @@ func (r *mutationResolver) DeleteGraph(ctx context.Context, input model.DeleteGr
 }
 
 type GraphSlice struct {
-	Graphs []model.GraphInfo
+	Graphs []*model.GraphInfo
 }
 
-func (r *queryResolver) Graphs(ctx context.Context, input *model.GetGraphs) ([]model.GraphInfo, error) {
+func (r *queryResolver) Graphs(ctx context.Context, input *model.GetGraphs) ([]*model.GraphInfo, error) {
 	path := fmt.Sprintf("/v1/users/%s/graphs", input.Username)
 	data, err := r.get(ctx, path)
 	if err != nil {

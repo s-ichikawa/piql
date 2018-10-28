@@ -117,10 +117,10 @@ type MutationResolver interface {
 	DeleteWebhook(ctx context.Context, input model.DeleteWebhook) (*model.MutationResponse, error)
 }
 type QueryResolver interface {
-	Graphs(ctx context.Context, input *model.GetGraphs) ([]model.GraphInfo, error)
+	Graphs(ctx context.Context, input *model.GetGraphs) ([]*model.GraphInfo, error)
 	Graph(ctx context.Context, input *model.GetGraph) (*model.Graph, error)
 	Pixel(ctx context.Context, input *model.GetPixel) (*model.Pixel, error)
-	Webhooks(ctx context.Context, input *model.GetWebhooks) ([]model.Webhook, error)
+	Webhooks(ctx context.Context, input *model.GetWebhooks) ([]*model.Webhook, error)
 }
 
 func field_Mutation_createUser_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
@@ -1865,6 +1865,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			wg.Add(1)
 			go func(i int, field graphql.CollectedField) {
 				out.Values[i] = ec._Query_graphs(ctx, field)
+				if out.Values[i] == graphql.Null {
+					invalid = true
+				}
 				wg.Done()
 			}(i, field)
 		case "graph":
@@ -1883,6 +1886,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			wg.Add(1)
 			go func(i int, field graphql.CollectedField) {
 				out.Values[i] = ec._Query_webhooks(ctx, field)
+				if out.Values[i] == graphql.Null {
+					invalid = true
+				}
 				wg.Done()
 			}(i, field)
 		case "__type":
@@ -1919,9 +1925,12 @@ func (ec *executionContext) _Query_graphs(ctx context.Context, field graphql.Col
 		return ec.resolvers.Query().Graphs(rctx, args["input"].(*model.GetGraphs))
 	})
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.GraphInfo)
+	res := resTmp.([]*model.GraphInfo)
 	rctx.Result = res
 
 	arr1 := make(graphql.Array, len(res))
@@ -1936,7 +1945,7 @@ func (ec *executionContext) _Query_graphs(ctx context.Context, field graphql.Col
 		idx1 := idx1
 		rctx := &graphql.ResolverContext{
 			Index:  &idx1,
-			Result: &res[idx1],
+			Result: res[idx1],
 		}
 		ctx := graphql.WithResolverContext(ctx, rctx)
 		f := func(idx1 int) {
@@ -1945,7 +1954,11 @@ func (ec *executionContext) _Query_graphs(ctx context.Context, field graphql.Col
 			}
 			arr1[idx1] = func() graphql.Marshaler {
 
-				return ec._GraphInfo(ctx, field.Selections, &res[idx1])
+				if res[idx1] == nil {
+					return graphql.Null
+				}
+
+				return ec._GraphInfo(ctx, field.Selections, res[idx1])
 			}()
 		}
 		if isLen1 {
@@ -2040,9 +2053,12 @@ func (ec *executionContext) _Query_webhooks(ctx context.Context, field graphql.C
 		return ec.resolvers.Query().Webhooks(rctx, args["input"].(*model.GetWebhooks))
 	})
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Webhook)
+	res := resTmp.([]*model.Webhook)
 	rctx.Result = res
 
 	arr1 := make(graphql.Array, len(res))
@@ -2057,7 +2073,7 @@ func (ec *executionContext) _Query_webhooks(ctx context.Context, field graphql.C
 		idx1 := idx1
 		rctx := &graphql.ResolverContext{
 			Index:  &idx1,
-			Result: &res[idx1],
+			Result: res[idx1],
 		}
 		ctx := graphql.WithResolverContext(ctx, rctx)
 		f := func(idx1 int) {
@@ -2066,7 +2082,11 @@ func (ec *executionContext) _Query_webhooks(ctx context.Context, field graphql.C
 			}
 			arr1[idx1] = func() graphql.Marshaler {
 
-				return ec._Webhook(ctx, field.Selections, &res[idx1])
+				if res[idx1] == nil {
+					return graphql.Null
+				}
+
+				return ec._Webhook(ctx, field.Selections, res[idx1])
 			}()
 		}
 		if isLen1 {
@@ -4253,9 +4273,9 @@ input GetWebhooks {
 }
 
 type Query {
-  graphs(input: GetGraphs): [GraphInfo!]
+  graphs(input: GetGraphs): [GraphInfo]!
   graph(input: GetGraph): Graph
   pixel(input: GetPixel): Pixel
-  webhooks(input: GetWebhooks): [Webhook!]
+  webhooks(input: GetWebhooks): [Webhook]!
 }`},
 )

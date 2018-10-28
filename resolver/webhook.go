@@ -37,10 +37,10 @@ func (r *mutationResolver) DeleteWebhook(ctx context.Context, input model.Delete
 }
 
 type WebhookSlice struct {
-	Webhooks []model.Webhook
+	Webhooks []*model.Webhook
 }
 
-func (r *queryResolver) Webhooks(ctx context.Context, input *model.GetWebhooks) ([]model.Webhook, error) {
+func (r *queryResolver) Webhooks(ctx context.Context, input *model.GetWebhooks) ([]*model.Webhook, error) {
 	path := fmt.Sprintf("/v1/users/%s/webhooks", input.Username)
 
 	data, err := r.get(ctx, path)
@@ -51,8 +51,7 @@ func (r *queryResolver) Webhooks(ctx context.Context, input *model.GetWebhooks) 
 	var webhooks WebhookSlice
 	err = json.Unmarshal(data, &webhooks)
 	if err != nil {
-		log.Println("failed to json.Unmarshal:", err)
-		return []model.Webhook{}, nil
+		log.Fatalf("failed to json.Unmarshal: %s\n", err)
 	}
 	return webhooks.Webhooks, nil
 }
